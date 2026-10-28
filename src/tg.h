@@ -17,9 +17,9 @@ struct Message {
 
 class Tg {
 public:
-    static Tg& get_instance();
+    static const Tg& get_instance();
 
-    std::vector<Message> get_messages();
+    std::vector<Message> get_messages() const;
     void consume_msg(const Message& msg);
 
 private:

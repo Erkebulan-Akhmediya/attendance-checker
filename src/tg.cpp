@@ -9,14 +9,14 @@
 
 const std::string BOT_TOKEN = getenv("BOT_TOKEN");
 
-Tg& Tg::get_instance()
+const Tg& Tg::get_instance()
 {
     if (!instance)
         instance.reset(new Tg());
     return *instance.get();
 }
 
-std::vector<Message> Tg::get_messages()
+std::vector<Message> Tg::get_messages() const
 {
     const std::string url = "https://api.telegram.org/bot" + BOT_TOKEN + "/getUpdates?offset=" + std::to_string(m_offset);
     const auto updates = get_request(url);
