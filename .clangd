@@ -1,0 +1,7 @@
+# Place this file in the project root (next to src/, extern/, build/).
+# clangd looks for .clangd in the source file's directory and its parents.
+
+CompileFlags:
+  # Directory containing compile_commands.json, relative to this file.
+  # CMake writes it there when CMAKE_EXPORT_COMPILE_COMMANDS is ON.
+  CompilationDatabase: build
