@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.2)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(attendance-checker)
-add_executable(main main.cpp)
+file(GLOB SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+add_executable(main ${SOURCES})
 
 find_package(CURL)
 target_link_libraries(main PRIVATE CURL::libcurl)
