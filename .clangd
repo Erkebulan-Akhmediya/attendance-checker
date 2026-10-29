@@ -5,3 +5,7 @@ CompileFlags:
   # Directory containing compile_commands.json, relative to this file.
   # CMake writes it there when CMAKE_EXPORT_COMPILE_COMMANDS is ON.
   CompilationDatabase: build
+  Add:
+    - -std=c++23
+    - -Wall
+    - -Wextra
