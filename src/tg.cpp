@@ -47,7 +47,7 @@ void Tg::consume_msg(const Message& msg)
     m_offset = msg.m_update_id + 1;
 }
 
-void Tg::send_message(unsigned long long chat_id, const std::string& text)
+void Tg::send_message(unsigned long long chat_id, const std::string& text) const
 {
     Http http;
     const std::string url = std::format("{}/sendMessage?chat_id={}&text={}", BASE_URL, chat_id, http.encode(text).get());

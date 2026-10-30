@@ -28,7 +28,7 @@ public:
 
     std::vector<Message> get_messages() const;
     void consume_msg(const Message& msg);
-    void send_message(unsigned long long chat_id, const std::string& text);
+    void send_message(unsigned long long chat_id, const std::string& text) const;
 
 private:
     Tg();
