@@ -1,3 +1,4 @@
+#include "db.h"
 #include "tg.h"
 #include <format>
 #include <iostream>
@@ -12,6 +13,7 @@ std::string reg_user(const std::string& code, const std::string& telegram_userna
 {
     fprintf(stderr, "%s\n", std::string(telegram_username).c_str());
     std::string tmrw_username = decrypt_code(code);
+    Db().insert_username(tmrw_username, telegram_username);
     return tmrw_username;
 }
 
