@@ -1,6 +1,6 @@
 #include <cstdlib>
-#include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 struct Message {
@@ -20,24 +20,20 @@ struct Message {
         , m_text(text)
     {
     }
+
+    void reply(const std::string& text) const;
 };
 
 class Tg {
 public:
-    static const Tg& get_instance();
-
-    std::vector<Message> get_messages() const;
-    void consume_msg(const Message& msg);
-    void send_message(unsigned long long chat_id, const std::string& text) const;
+    static std::vector<Message> get_messages();
+    static void consume_msg(const Message& msg);
+    static void send_message(unsigned long long chat_id, const std::string& text);
 
 private:
-    Tg();
-
-    static std::unique_ptr<Tg> instance;
-
-    unsigned long long m_offset;
-    const std::string BOT_TOKEN;
-    const std::string BASE_URL;
+    static unsigned long long m_offset;
+    static const std::string BOT_TOKEN;
+    static const std::string BASE_URL;
 };
 
 std::ostream& operator<<(std::ostream& os, const Message& msg);
