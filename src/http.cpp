@@ -42,7 +42,7 @@ json Http::get_req(const std::string& url)
     return json::parse(res);
 }
 
-std::unique_ptr<char, decltype(&curl_free)> Http::encode(const std::string& data)
+EncodedString Http::encode(const std::string& data)
 {
     return { curl_easy_escape(m_curl.get(), data.c_str(), data.size()), &curl_free };
 }
