@@ -1,6 +1,7 @@
 #include "tg.h"
 #include "http.h"
 #include <curl/curl.h>
+#include <format>
 #include <iostream>
 #include <memory>
 #include <nlohmann/json.hpp>
@@ -27,7 +28,7 @@ Tg::Tg()
 std::vector<Message> Tg::get_messages() const
 {
     const std::string url = BASE_URL + "/getUpdates?offset=" + std::to_string(m_offset);
-    const auto updates = get_request(url);
+    const auto updates = Http().get_req(url);
 
     std::vector<Message> messages;
     for (const auto& update : updates["result"]) {
@@ -48,14 +49,9 @@ void Tg::consume_msg(const Message& msg)
 
 void Tg::send_message(unsigned long long chat_id, const std::string& text)
 {
-    std::string url = BASE_URL + "/sendMessage";
-    std::vector<std::pair<std::string, std::string>> params = {
-        { "chat_id", std::to_string(chat_id) },
-    };
-    std::vector<std::pair<std::string, std::string>> encoded_params = {
-        { "text", text }
-    };
-    get_request(url, params, encoded_params);
+    Http http;
+    const std::string url = std::format("{}/sendMessage?chat_id={}&text={}", BASE_URL, chat_id, http.encode(text).get());
+    http.get_req(url);
 }
 
 std::ostream& operator<<(std::ostream& os, const Message& msg)

@@ -1,3 +1,6 @@
+#include <curl/curl.h>
+#include <curl/easy.h>
+#include <memory>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <utility>
@@ -5,13 +8,18 @@
 
 using json = nlohmann::json;
 
-typedef std::vector<std::pair<std::string, std::string>> Params;
+class Http {
+public:
+    Http();
 
-json get_request(const std::string& url);
+    json get_req(const std::string& url);
+    json get_req(
+        std::string& url,
+        const std::vector<std::pair<std::string, std::string>>& params,
+        const std::vector<std::pair<std::string, std::string>>& encoded_params);
 
-std::string url_encode(const std::string& data);
+    std::unique_ptr<char, decltype(&curl_free)> encode(const std::string& data);
 
-json get_request(
-    std::string& url,
-    const std::vector<std::pair<std::string, std::string>>& params,
-    const std::vector<std::pair<std::string, std::string>>& encoded_params);
+private:
+    std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> m_curl;
+};
