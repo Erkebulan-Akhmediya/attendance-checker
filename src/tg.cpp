@@ -7,7 +7,6 @@
 #include <nlohmann/json.hpp>
 #include <ostream>
 #include <string>
-#include <string_view>
 #include <vector>
 
 void Message::reply(const std::string& text) const
@@ -22,21 +21,21 @@ const std::string Tg::BASE_URL = "https://api.telegram.org/bot" + BOT_TOKEN;
 std::vector<Message> Tg::get_messages()
 {
     try {
-	    const std::string url = BASE_URL + "/getUpdates?offset=" + std::to_string(m_offset);
-	    const auto updates = Http().get_req(url);
+        const std::string url = BASE_URL + "/getUpdates?offset=" + std::to_string(m_offset);
+        const auto updates = Http().get_req(url);
 
-	    std::vector<Message> messages;
-	    for (const auto& update : updates["result"]) {
-	        const unsigned long long update_id = update["update_id"];
-	        const auto& msg = update["message"];
-	        const unsigned long long chat_id = msg["chat"]["id"];
-	        const std::string from = msg["from"]["username"];
-	        const std::string text = msg["text"];
-	        messages.emplace_back(update_id, chat_id, from, text);
-	    }
-	    return messages;
-    } catch(std::exception& e) {
-    	std::cout << "failed to get Telegram messages: " << e.what() << '\n';
+        std::vector<Message> messages;
+        for (const auto& update : updates["result"]) {
+            const unsigned long long update_id = update["update_id"];
+            const auto& msg = update["message"];
+            const unsigned long long chat_id = msg["chat"]["id"];
+            const std::string from = msg["from"]["username"];
+            const std::string text = msg["text"];
+            messages.emplace_back(update_id, chat_id, from, text);
+        }
+        return messages;
+    } catch (std::exception& e) {
+        std::cout << "failed to get Telegram messages: " << e.what() << '\n';
     }
     return {};
 }
