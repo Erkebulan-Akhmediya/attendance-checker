@@ -1,3 +1,6 @@
+#ifndef TG_H
+#define TG_H
+
 #include <cstdlib>
 #include <string>
 #include <vector>
@@ -36,3 +39,5 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& os, const Message& msg);
+
+#endif

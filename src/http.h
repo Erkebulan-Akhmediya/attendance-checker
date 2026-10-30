@@ -1,3 +1,6 @@
+#ifndef HTTP_H
+#define HTTP_H
+
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <memory>
@@ -19,3 +22,5 @@ public:
 private:
     std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> m_curl;
 };
+
+#endif
