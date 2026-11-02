@@ -1,10 +1,26 @@
+#include "bot.h"
+#include "../user/user_service.h"
 #include "tg.h"
-#include "user/user_service.h"
 #include <format>
 #include <iostream>
 #include <string>
 
-void process_msg(const Message& msg)
+void Bot::run()
+{
+    const int POLLS_PER_SEC = 1;
+    const int SLEEP_DURATION = 1000000 / POLLS_PER_SEC;
+
+    for (; true; usleep(SLEEP_DURATION)) {
+        for (const auto& msg : Tg::get_messages()) {
+            std::cout << msg << '\n';
+            process_msg(msg);
+            Tg::consume_msg(msg);
+        }
+        std::cout << "waiting...\n";
+    }
+}
+
+void Bot::process_msg(const Message& msg)
 {
     try {
         // we expect a string after "/start" to be at least 2 or more characters long

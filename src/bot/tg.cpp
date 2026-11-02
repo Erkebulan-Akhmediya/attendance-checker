@@ -1,5 +1,5 @@
 #include "tg.h"
-#include "http.h"
+#include "../http.h"
 #include <cstdlib>
 #include <curl/curl.h>
 #include <format>
@@ -8,6 +8,37 @@
 #include <ostream>
 #include <string>
 #include <vector>
+
+Message::Message(
+    unsigned long long update_id,
+    unsigned long long chat_id,
+    std::string from,
+    std::string text)
+    : m_update_id(update_id)
+    , m_chat_id(chat_id)
+    , m_from(from)
+    , m_text(text)
+{
+}
+
+Message::Message(const nlohmann::json& json)
+{
+    try {
+        m_update_id = json.at("update_id");
+        const auto& msg = json.at("message");
+        m_chat_id = msg.at("chat").at("id");
+        m_from = msg.at("from").at("username");
+        m_text = msg.at("text");
+    } catch (nlohmann::json::exception& e) {
+        std::cout << "invalid json schema\n";
+        throw Message::Exception(m_update_id);
+    }
+}
+
+Message::Exception::Exception(unsigned long long update_id)
+    : m_update_id(update_id)
+{
+}
 
 void Message::reply(const std::string& text) const
 {
@@ -26,11 +57,13 @@ std::vector<Message> Tg::get_messages()
 
         std::vector<Message> messages;
         for (const auto& update : updates["result"]) {
-            messages.emplace_back(update);
+            try {
+                messages.emplace_back(update);
+            } catch (Message::Exception& e) {
+                Tg::skip(e.m_update_id);
+            }
         }
         return messages;
-    } catch (Message::Exception& e) {
-        Tg::skip(e.m_update_id);
     } catch (std::exception& e) {
         std::cout << "failed to get Telegram messages: " << e.what() << '\n';
     }
