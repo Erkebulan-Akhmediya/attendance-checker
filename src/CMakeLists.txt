@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 add_executable(main ${SOURCES})
-target_compile_options(main PRIVATE -Wall -Wextra -Werror -g)
+target_compile_options(main PRIVATE -lsodium -Wall -Wextra -Werror -g)
 
 find_package(CURL)
 target_link_libraries(main PRIVATE CURL::libcurl)

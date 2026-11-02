@@ -2,18 +2,27 @@
 Built on and for Debian/Ubuntu Linux.
 
 # Dependencies
+
 #### sqlite3
 installation:
 ```
 sudo apt install libsqlite3-dev
 ```
+
 #### libcurl
 installation:
 ```
 sudo apt install libcurl4-openssl-dev
 ```
+
 #### nlohmann/json
 single header library
+
+#### sodium
+installation:
+```
+sudo apt install libsodium-dev
+```
 
 # Plan
 
