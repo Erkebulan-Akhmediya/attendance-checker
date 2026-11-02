@@ -1,4 +1,5 @@
 #include "bot.h"
+#include "../user/user_exceptions.h"
 #include "../user/user_service.h"
 #include "tg.h"
 #include <format>
@@ -37,6 +38,8 @@ void Bot::process_msg(const Message& msg)
         } else {
             msg.reply(std::format("received \"{}\" from {}", msg.m_text, msg.m_from));
         }
+    } catch (User::Exceptions::NoUserChanged& e) {
+        msg.reply("Не праивльные данные:\nпользователь уже привязан или такого пользователя вовсе не существует.\nУбедитесь в правильности ссылки");
     } catch (std::exception& e) {
         std::cout << "failed to process a Telegram message: " << e.what() << '\n';
     }

@@ -1,4 +1,6 @@
 #include "user_repo.h"
+#include "user_exceptions.h"
+#include <stdexcept>
 #include <string>
 
 UserRepo::UserRepo()
@@ -15,4 +17,6 @@ void UserRepo::add_telegram_username(const std::string& tmrw_username, const std
     const int res = sqlite3_step(stmt.get());
     if (res != SQLITE_DONE)
         throw std::runtime_error("failed to update telegram username");
+    if (m_db.rows_changed() == 0)
+        throw User::Exceptions::NoUserChanged();
 }

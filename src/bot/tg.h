@@ -4,12 +4,13 @@
 #include <cstdlib>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
 struct Message {
 
-    struct Exception {
+    struct Exception : std::runtime_error {
         unsigned long long m_update_id;
 
         Exception(unsigned long long update_id);

@@ -32,3 +32,8 @@ std::unique_ptr<sqlite3_stmt, decltype(&sqlite3_finalize)> Db::make_stmt(const s
     sqlite3_prepare_v2(m_db.get(), query.c_str(), -1, &raw_stmt, nullptr);
     return { raw_stmt, &sqlite3_finalize };
 }
+
+int Db::rows_changed()
+{
+    return sqlite3_changes(m_db.get());
+}

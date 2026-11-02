@@ -6,6 +6,7 @@
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <ostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -36,7 +37,8 @@ Message::Message(const nlohmann::json& json)
 }
 
 Message::Exception::Exception(unsigned long long update_id)
-    : m_update_id(update_id)
+    : std::runtime_error("message exception")
+    , m_update_id(update_id)
 {
 }
 
