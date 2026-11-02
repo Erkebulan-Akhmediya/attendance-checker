@@ -26,14 +26,11 @@ std::vector<Message> Tg::get_messages()
 
         std::vector<Message> messages;
         for (const auto& update : updates["result"]) {
-            const unsigned long long update_id = update["update_id"];
-            const auto& msg = update["message"];
-            const unsigned long long chat_id = msg["chat"]["id"];
-            const std::string from = msg["from"]["username"];
-            const std::string text = msg["text"];
-            messages.emplace_back(update_id, chat_id, from, text);
+            messages.emplace_back(update);
         }
         return messages;
+    } catch (Message::Exception& e) {
+        Tg::skip(e.m_update_id);
     } catch (std::exception& e) {
         std::cout << "failed to get Telegram messages: " << e.what() << '\n';
     }
@@ -43,6 +40,11 @@ std::vector<Message> Tg::get_messages()
 void Tg::consume_msg(const Message& msg)
 {
     m_offset = msg.m_update_id + 1;
+}
+
+void Tg::skip(unsigned long long update_id)
+{
+    m_offset = update_id + 1;
 }
 
 void Tg::send_message(unsigned long long chat_id, const std::string& text)

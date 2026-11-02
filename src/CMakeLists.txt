@@ -6,7 +6,7 @@ project(attendance-checker)
 
 set(CMAKE_CXX_STANDARD 23)
 
-file(GLOB SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 add_executable(main ${SOURCES})
 target_compile_options(main PRIVATE -Wall -Wextra -Werror -g)
 

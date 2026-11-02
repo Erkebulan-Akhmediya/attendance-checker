@@ -6,6 +6,15 @@
 #include <stdexcept>
 #include <string>
 
+Db* Db::m_instance;
+
+Db& Db::get_instance()
+{
+    if (!m_instance)
+        m_instance = new Db();
+    return *m_instance;
+}
+
 Db::Db()
     : m_db(nullptr, &sqlite3_close)
 {
@@ -15,16 +24,6 @@ Db::Db()
         throw std::runtime_error("failed to open database connection");
     std::cout << "successfully connected to database (" << std::getenv("DB_FILE") << ")\n";
     m_db.reset(db);
-}
-
-void Db::insert_username(const std::string& tmrw_username, const std::string& telegram_username)
-{
-    auto stmt = make_stmt("update users set telegram_username = ? where tmrw_username = ?");
-    sqlite3_bind_text(stmt.get(), 1, telegram_username.c_str(), telegram_username.size(), SQLITE_TRANSIENT);
-    sqlite3_bind_text(stmt.get(), 2, tmrw_username.c_str(), tmrw_username.size(), SQLITE_TRANSIENT);
-    const int res = sqlite3_step(stmt.get());
-    if (res != SQLITE_DONE)
-        throw std::runtime_error("failed to update telegram username");
 }
 
 std::unique_ptr<sqlite3_stmt, decltype(&sqlite3_finalize)> Db::make_stmt(const std::string& query)
