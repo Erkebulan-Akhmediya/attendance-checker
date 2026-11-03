@@ -23,3 +23,8 @@ add_library(nlohmann_json INTERFACE)
 # SYSTEM keeps warnings from the third-party header out of -Werror
 target_include_directories(nlohmann_json SYSTEM INTERFACE ${PROJECT_SOURCE_DIR}/../extern)
 target_link_libraries(main PRIVATE nlohmann_json)
+
+add_library(httplib INTERFACE)
+# SYSTEM keeps warnings from the third-party header out of -Werror
+target_include_directories(httplib SYSTEM INTERFACE ${PROJECT_SOURCE_DIR}/../extern)
+target_link_libraries(main PRIVATE httplib)

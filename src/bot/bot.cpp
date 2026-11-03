@@ -17,7 +17,6 @@ void Bot::run()
             process_msg(msg);
             Tg::consume_msg(msg);
         }
-        std::cout << "waiting...\n";
     }
 }
 

@@ -4,6 +4,7 @@
 #include <memory>
 #include <sqlite3.h>
 #include <string>
+#include <vector>
 
 class Db {
 public:
@@ -12,6 +13,8 @@ public:
     std::unique_ptr<sqlite3_stmt, decltype(&sqlite3_finalize)> make_stmt(const std::string& query);
 
     int rows_changed();
+
+    std::vector<std::vector<std::string>> exec(const std::string&& query);
 
 private:
     static Db* m_instance;

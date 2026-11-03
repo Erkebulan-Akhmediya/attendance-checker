@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+// TODO: make it singleton
+// TODO: use persistent keys
 class Crypto {
 public:
     Crypto();
@@ -15,6 +17,8 @@ public:
 
 private:
     static constexpr int b64_variant = sodium_base64_VARIANT_URLSAFE_NO_PADDING;
+
+    static const Crypto instance;
 
     const std::vector<unsigned char> m_key;
 

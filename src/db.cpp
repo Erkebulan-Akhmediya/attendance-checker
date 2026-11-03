@@ -5,6 +5,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 Db* Db::m_instance;
 
@@ -36,4 +37,29 @@ std::unique_ptr<sqlite3_stmt, decltype(&sqlite3_finalize)> Db::make_stmt(const s
 int Db::rows_changed()
 {
     return sqlite3_changes(m_db.get());
+}
+
+int write_row(void* rows, int cols, char** col, char**)
+{
+    if (!col)
+        return 0;
+    auto rows_vector = reinterpret_cast<std::vector<std::vector<std::string>>*>(rows);
+    std::vector<std::string> row;
+    for (int i = 0; i < cols; ++i)
+        row.push_back(col[i]);
+    rows_vector->push_back(row);
+    return 0;
+}
+
+std::vector<std::vector<std::string>> Db::exec(const std::string&& query)
+{
+    std::vector<std::vector<std::string>> rows;
+    std::unique_ptr<char, decltype(&sqlite3_free)> err_msg(nullptr, &sqlite3_free);
+    char* err_msg_data = err_msg.get();
+    const int res = sqlite3_exec(m_db.get(), query.data(), &write_row, &rows, &err_msg_data);
+    if (res != SQLITE_OK) {
+        std::cout << err_msg.get() << '\n';
+        throw std::runtime_error("failed to exec");
+    }
+    return rows;
 }
