@@ -5,6 +5,7 @@
 #include <sodium/utils.h>
 #include <string>
 #include <vector>
+
 class Crypto {
 public:
     Crypto();

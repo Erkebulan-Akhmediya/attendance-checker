@@ -1,6 +1,9 @@
 #include "bot/bot.h"
+#include <thread>
+#include <unistd.h>
 
 int main()
 {
-    Bot::run();
+    std::thread bot_thread(Bot::run);
+    bot_thread.join();
 }

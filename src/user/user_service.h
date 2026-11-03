@@ -1,6 +1,7 @@
 #ifndef USER_SERVICE_H
 #define USER_SERVICE_H
 
+#include "../crypto.h"
 #include "user_repo.h"
 #include <string>
 
@@ -12,8 +13,7 @@ public:
 
 private:
     UserRepo m_repo;
-
-    std::string decrypt_code(const std::string& code);
+    Crypto m_crypto_service;
 };
 
 #endif
