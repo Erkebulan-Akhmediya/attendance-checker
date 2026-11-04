@@ -19,8 +19,6 @@ public:
 private:
     static constexpr int b64_variant = sodium_base64_VARIANT_URLSAFE_NO_PADDING;
 
-    static const Crypto& instance;
-
     Crypto();
 
     const std::vector<unsigned char> m_key;

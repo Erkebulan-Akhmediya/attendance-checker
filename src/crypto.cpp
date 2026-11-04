@@ -1,6 +1,6 @@
 #include "crypto.h"
 #include <cstddef>
-#include <iostream>
+#include <cstdlib>
 #include <sodium.h>
 #include <sodium/core.h>
 #include <sodium/crypto_secretbox.h>
@@ -10,22 +10,19 @@
 #include <string>
 #include <vector>
 
-const Crypto& Crypto::instance = *(new Crypto());
-
 const Crypto& Crypto::get_instance()
 {
+    static const Crypto instance;
     return instance;
 }
 
 Crypto::Crypto()
-    : m_key(crypto_secretbox_KEYBYTES)
+    : m_key([&] {
+        if (sodium_init() < 0)
+            throw std::runtime_error("failed to init sodium lib");
+        return from_base64(getenv("SECRET_KEY"));
+    }())
 {
-    if (sodium_init() < 0)
-        throw std::runtime_error("failed to init sodium lib");
-
-    randombytes_buf(const_cast<unsigned char*>(m_key.data()), m_key.size());
-
-    std::cout << "crypto obj created\n";
 }
 
 std::string Crypto::encrypt(const std::string& message) const
