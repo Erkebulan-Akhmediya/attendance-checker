@@ -17,7 +17,7 @@ public:
 
 private:
     UserRepo m_repo;
-    Crypto m_crypto_service;
+    const Crypto& m_crypto_service;
 };
 
 #endif

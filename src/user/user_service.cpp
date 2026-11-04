@@ -4,7 +4,7 @@
 
 UserService::UserService()
     : m_repo()
-    , m_crypto_service()
+    , m_crypto_service(Crypto::get_instance())
 {
 }
 

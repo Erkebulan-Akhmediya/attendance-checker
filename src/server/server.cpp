@@ -25,7 +25,8 @@ void Server::run()
         using json = nlohmann::json;
         std::vector<std::string> links;
         for (const auto& username : UserService().get_unregistered()) {
-            const auto link = std::format("https://t.me/ts_pvl_attendance_bot?start={}", Crypto().encrypt(username));
+            constexpr auto link_template = "https://t.me/ts_pvl_attendance_bot?start={}";
+            const auto link = std::format(link_template, Crypto::get_instance().encrypt(username));
             links.push_back(link);
         }
         auto unregistered = UserService().get_unregistered();
